@@ -69,28 +69,57 @@ def readCurrency():
         except ValueError:
             return 0
 
+#Bet Home Menu
+def bet():
+    betInput = input("What would you like to bet on?\nType 'Outcome' to bet on the outcome of the game.\nType 'Runs' to bet on the total runs scored in the game.\nType 'Back' to go back to the main menu.")
+    if betInput == "Outcome" or betInput == "outcome":
+        checkDailyInputBetCheckOutcome()
+        if checkDailyInputBetCheckOutcome() == True:
+            print("\nYou have chosen to bet on the outcome of the game!\n")
+            time.sleep(2)
+            recordRunDateBetCheckOutcome()
+            betGameOutcome()
+        elif checkDailyInputBetCheckOutcome() == False:
+            print("\nYou have already made a bet on the outcome of the game for the day! Please come back tomorrow to make a new bet.\n")
+        time.sleep(2)
+    elif betInput == "Runs" or betInput == "runs":
+        checkDailyInputBetRunTotals()
+        if checkDailyInputBetRunTotals() == True:
+            recordRunDateBetRunTotals()
+            betRunTotals()
+        elif checkDailyInputBetRunTotals() == False:
+            print("\nYou have already made a bet on the total runs scored in the game for the day! Please come back tomorrow to make a new bet.\n")
+        time.sleep(2)
+    elif betInput == "Back" or betInput == "back":
+        print("Going back to the main menu...\n")
+        time.sleep(2)
+        menu()
+    else:
+        print("Invalid input, please try again.")
+        time.sleep(2)
+        bet()
 #Bet Menus
 def betGameOutcome():
-    global betAmount, multiplier, current, starting
+    global betAmountOutcome, multiplier1, current1, starting1
     # start with current currency from file
-    current = readCurrency()
-    starting = current
+    current1 = readCurrency()
+    starting1 = current1
 
-    betAmount = int(input("How much currency would you like to bet? "))
-    if betAmount > current:
+    betAmountOutcome = int(input("How much currency would you like to bet? "))
+    if betAmountOutcome > current1:
         print("You do not have enough currency to make that bet. Please try again.")
         time.sleep(2)
         menu()
     else:
-        current -= betAmount
-        writeCurrency(current)
+        current1 -= betAmountOutcome
+        writeCurrency(current1)
         time.sleep(1)
 
     odds = input("What are the odds for your team to win? (e.g. +150, -200) ")
     if odds.startswith('+'):
-        multiplier = int(odds[1:]) / 100
+        multiplier1 = int(odds[1:]) / 100
     elif odds.startswith('-'):
-        multiplier = 100 / int(odds[1:])
+        multiplier1 = 100 / int(odds[1:])
     else:
         print("Invalid odds format. Please try again.")
         time.sleep(2)
@@ -101,23 +130,104 @@ def betGameOutcome():
     time.sleep(2)
     menu()
 
-#Check Bet Menu
-def checkBets():
-    global betAmount, multiplier, current, starting
+def betRunTotals():
+    global betAmountRuns, multiplier2, current2, starting2, underTotal, overTotal
+    # start with current currency from file
+    current2 = readCurrency()
+    starting2 = current2
+
+    betAmountRuns = int(input("How much currency would you like to bet? "))
+    if betAmountRuns > current2:
+        print("You do not have enough currency to make that bet. Please try again.")
+        time.sleep(2)
+        menu()
+    else:
+        current2 -= betAmountRuns
+        writeCurrency(current2)
+        time.sleep(1)
+
+    overTotal = input("What is the over run total? (e.g. 8.5, 5.5) ")
+    if overTotal.endswith('.5'):
+        multiplier2 = 1.9
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        menu()
+    underTotal = input("What is the under run total? (e.g. 8.5, 5.5) ")
+    if underTotal.endswith('.5'):
+        multiplier2 = 1.9
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        menu()
+    time.sleep(2)
+    print("Going back to the main menu...\n")
+    time.sleep(2)
+    menu()
+
+#Check Bet Home Menu
+def checkBet():
+    checkInput = input("What bet would you like to check on?\nType 'Outcome' to check on the outcome of the game.\nType 'Runs' to check on the total runs scored in the game.\nType 'Back' to go back to the main menu.")
+    if checkInput == "Outcome" or checkInput == "outcome":
+        checkDailyInputBetCheckOutcome()
+        if checkDailyInputBetCheckOutcome() == True:
+            print("\nYou have chosen to check your bet on the outcome of the game!\n")
+            time.sleep(2)
+            recordRunDateBetCheckOutcome()
+            checkBetGameOutcome()
+        elif checkDailyInputBetCheckOutcome() == False:
+            print("\nYou have already checked your bet on the outcome of the game for the day! Please come back tomorrow to check new bets.\n")
+        time.sleep(2)
+    elif checkInput == "Runs" or checkInput == "runs":
+        checkDailyInputBetRunTotals()
+        if checkDailyInputBetRunTotals() == True:
+            print("\nYou have chosen to check your bet on the total runs scored in the game!\n")
+            time.sleep(2)
+            recordRunDateBetRunTotals()
+            checkBetRunTotals()
+        elif checkDailyInputBetRunTotals() == False:
+            print("\nYou have already checked your bet on the total runs scored in the game for the day! Please come back tomorrow to check new bets.\n")
+        time.sleep(2)
+    elif checkInput == "Back" or checkInput == "back":
+        print("Going back to the main menu...\n")
+        time.sleep(2)
+        menu()
+    else:
+        print("Invalid input, please try again.\n")
+        time.sleep(2)
+        checkBet()
+#Check Bet Menus
+def checkBetGameOutcome():
+    global betAmountOutcome, multiplier1, current1, starting1
     winorloss = int(input("Did your team win?\nType '1' for yes and '0' for no. "))
     if winorloss == 1:
-        winnings = int(betAmount * multiplier)
-        current += winnings
-        writeCurrency(current)
+        winnings = int(betAmountOutcome * multiplier1)
+        current1 += winnings
+        writeCurrency(current1)
         print(f"You won {winnings} currency from your bet!\n")
     elif winorloss == 0:
-        print(f"You lost {betAmount} currency from your bet.\n")
+        print(f"You lost {betAmountOutcome} currency from your bet.\n")
     else:
         print("Invalid input. Please try again.")
         time.sleep(2)
         menu()
     menu()
 
+def checkBetRunTotals():
+    global betAmountRuns, multiplier2, current2, starting2, underTotal, overTotal
+    winorloss = int(input("How many total runs were scored?\nType a number."))
+    if winorloss < int(overTotal) and winorloss > int(underTotal):
+        winnings = int(betAmountRuns * multiplier2)
+        current2 += winnings
+        writeCurrency(current2)
+        print(f"You won {winnings} currency from your bet!\n")
+    elif winorloss == 0:
+        print(f"You lost {betAmountRuns} currency from your bet.\n")
+    else:
+        print("Invalid input. Please try again.")
+        time.sleep(2)
+        menu()
+    menu()
 #Points Menu
 def points():
     # start with current score from file
@@ -224,7 +334,6 @@ def checkDailyInputPlayers():
     else:
         return True
     
-def checkDailyInputBet():
     trackingFile = "last_run_bet.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     if os.path.exists(trackingFile):
@@ -252,8 +361,22 @@ def checkDailyInputPoints():
     else:
         return True
 
-def checkDailyInputBetCheck():
-    trackingFile = "last_run_bet_check.txt"
+def checkDailyInputBetCheckOutcome():
+    trackingFile = "last_run_bet_check_outcome.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    if os.path.exists(trackingFile):
+        with open(trackingFile, 'r') as file:
+            last_run = file.read().strip()
+        if last_run == today_str:
+            print("You already used this function today. Please come back tomorrow!")
+            return False
+        else:
+            return True
+    else:
+        return True
+
+def checkDailyInputBetRunTotals():
+    trackingFile = "last_run_bet_run_totals.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     if os.path.exists(trackingFile):
         with open(trackingFile, 'r') as file:
@@ -272,20 +395,20 @@ def recordRunDatePlayers():
     with open(trackingFile, 'w') as file:
         file.write(today_str)     
 
-def recordRunDateBet():
-    trackingFile = "last_run_bet.txt"
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    with open(trackingFile, 'w') as file:
-        file.write(today_str)     
-
 def recordRunDatePoints():
     trackingFile = "last_run_points.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     with open(trackingFile, 'w') as file:
         file.write(today_str)
 
-def recordRunDateBetCheck():
-    trackingFile = "last_run_bet_check.txt"
+def recordRunDateBetCheckOutcome():
+    trackingFile = "last_run_bet_check_outcome.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    with open(trackingFile, 'w') as file:
+        file.write(today_str)
+
+def recordRunDateBetRunTotals():
+    trackingFile = "last_run_bet_run_totals.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     with open(trackingFile, 'w') as file:
         file.write(today_str)
@@ -301,7 +424,7 @@ def daily_team(items_array):
 
 #Home Menu
 def menu():
-    input1 = input("Type 'Points' to start entering stats and earning points.\nType 'Bet' to use your currency to bet on odds for the game.\nType 'Check' to check your bets.\nType 'Score' to see your current score.\nType 'Money' to see your current currency.\nType 'Players' to start entering your players for the day.\nType 'List' to see your players that you entered.\nType 'Team' to see your selected team.\n")
+    input1 = input("Type 'Points' to start entering stats and earning points.\nType 'Bet' to use your currency to bet on the game outcome, run totals and player props for the game.\nType 'Check' to check your bets.\nType 'Score' to see your current score.\nType 'Money' to see your current currency.\nType 'Players' to start entering your players for the day.\nType 'List' to see your players that you entered.\nType 'Team' to see your selected team.\n")
     if input1 == "Points" or input1 == "points":
         checkDailyInputPoints()
         if checkDailyInputPoints() == True:
@@ -314,27 +437,9 @@ def menu():
         time.sleep(2)
         menu()
     elif input1 == "Bet" or input1 == "bet":
-        checkDailyInputBet()
-        if checkDailyInputBet() == True:
-            print("\nYou have chosen to bet your currency on the game!\n")
-            time.sleep(2)
-            recordRunDateBet()
-            betGameOutcome()
-        elif checkDailyInputBet() == False:
-            print("\nYou have already made a bet for the day! Please come back tomorrow to make a new bet.\n")
-        time.sleep(2)
-        menu()
+        bet()
     elif input1 == "Check" or input1 == "check":
-        checkDailyInputBetCheck()
-        if checkDailyInputBetCheck() == True:
-            print("\nYou have chosen to check your bets for the game!\n")
-            time.sleep(2)
-            recordRunDateBetCheck()
-            checkBets()
-        elif checkDailyInputBetCheck() == False:
-            print("\nYou have already checked your bets for the day! Please come back tomorrow to check new bets.\n")
-        time.sleep(2)
-        menu()
+        checkBet()
     elif input1 == "Score" or input1 == "score":
         print("\nYour current score is: " + str(readScore()) + "\n")
         time.sleep(2)
