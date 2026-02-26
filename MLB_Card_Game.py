@@ -69,8 +69,8 @@ def readCurrency():
         except ValueError:
             return 0
 
-#Bet Menu
-def bet():
+#Bet Menus
+def betGameOutcome():
     global betAmount, multiplier, current, starting
     # start with current currency from file
     current = readCurrency()
@@ -200,6 +200,11 @@ def playerInput():
         Players.remove("n")
     time.sleep(3)
     writeScore(str(len(Players)))
+    if len(Players) == 10:
+        print("You have entered a full starting lineup! You have earned 500 currency points!\n")
+        current = readCurrency()
+        current += 500
+        writeCurrency(current)
     print("\nGoing back to the main menu...\n")
     time.sleep(2)
     menu()
@@ -314,7 +319,7 @@ def menu():
             print("\nYou have chosen to bet your currency on the game!\n")
             time.sleep(2)
             recordRunDateBet()
-            bet()
+            betGameOutcome()
         elif checkDailyInputBet() == False:
             print("\nYou have already made a bet for the day! Please come back tomorrow to make a new bet.\n")
         time.sleep(2)
