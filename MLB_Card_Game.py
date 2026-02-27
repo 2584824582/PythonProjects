@@ -74,7 +74,7 @@ def readCurrency():
 
 #Bet Home Menus
 def bet():
-    betInput = input("What would you like to bet on?\nType 'Outcome' to bet on the outcome of the game.\nType 'Runs' to bet on the total runs scored in the game.\nType 'Props' to bet on player props.\nType 'Back' to go back to the main menu.")
+    betInput = input("What would you like to bet on?\nType 'Outcome' to bet on the outcome of the game.\nType 'Runs' to bet on the total runs scored in the game.\nType 'Props' to bet on player props.\nType 'Back' to go back to the main menu.\n")
     if betInput == "Outcome" or betInput == "outcome":
         checkDailyInputBetCheckOutcome()
         if checkDailyInputBetCheckOutcome() == True:
@@ -105,7 +105,7 @@ def bet():
         bet()
 
 def betPlayerPropsHomeMenu():
-    input2 = input("Would you like to bet on pitcher's performance or fielder's performance, or both?")
+    input2 = input("Would you like to bet on pitcher's performance or fielder's performance, or both?\nType 'Pitcher' to bet on the pitcher's performance, 'Fielder' to bet on the fielder's performance, and 'Both' to bet on both the pitcher's and fielder's performance. ")
     if input2 == "Pitcher" or input2 == "pitcher":
         checkDailyInputBetPlayerPropsPitcher()
         if checkDailyInputBetPlayerPropsPitcher() == True:
@@ -124,6 +124,7 @@ def betPlayerPropsHomeMenu():
         if checkDailyInputBetPlayerPropsFielder() == True:
             print("You have chosen to bet on the fielder's performance!\n")
             recordRunDateBetPlayerPropsFielder()
+            betPlayerPropsFielderOnly()
             time.sleep(2)
         elif checkDailyInputBetPlayerPropsFielder() == False:
             print("You have already made a bet on the fielder's performance for the day! Please come back tomorrow to make a new bet.\n")
@@ -219,13 +220,12 @@ def betRunTotals():
     menu()
 
 def betPlayerPropsPitcherOnly():
-    
-    global betAmountPitcher, multiplier3, current3, starting3
+    global betAmountPitcher, multiplier3, current3, starting3, StrikeoutsOverTotal, StrikeoutsUnderTotal
     # start with current currency from file
     current3 = readCurrency()
     starting3 = current3
 
-    betAmountPitcher = int(input("How much currency would you like to bet? "))
+    betAmountPitcher = int(input("How much currency would you like to bet?\n"))
     if betAmountPitcher > current3:
         print("You do not have enough currency to make that bet. Please try again.")
         time.sleep(2)
@@ -238,21 +238,21 @@ def betPlayerPropsPitcherOnly():
     print(f"Your pitcher to bet on today is: {dailyPitcher}\n")
     time.sleep(2)
 
-    StrikeoutsOverTotal = input("What is the over for strikeouts for your pitcher? (e.g. 8.5, 5.5) ")
+    StrikeoutsOverTotal = input("What is the over for strikeouts for your pitcher? (e.g. 8.5, 5.5)\n")
     if StrikeoutsOverTotal.endswith('.5'):
         multiplier3 = 1.9
     else:
         print("Invalid total format. Please try again.")
         time.sleep(2)
         bet()
-    StrikeoutsUnderTotal = input("What is the under for strikeouts for your pitcher? (e.g. 8.5, 5.5) ")
+    StrikeoutsUnderTotal = input("What is the under for strikeouts for your pitcher? (e.g. 8.5, 5.5)\n")
     if StrikeoutsUnderTotal.endswith('.5'):
         multiplier3 = 1.9
     else:
         print("Invalid total format. Please try again.")
         time.sleep(2)
         bet()
-    pick3 = input("Do you pick the over or under for strikeouts?\nType 'Over' to pick the over and 'Under' to pick the under. ")
+    pick3 = input("Do you pick the over or under for strikeouts?\nType 'Over' to pick the over and 'Under' to pick the under.\n")
     if pick3 == "Over" or pick3 == "over":
         multiplier3 = multiplier3
     elif pick3 == "Under" or pick3 == "under":
@@ -319,7 +319,7 @@ def betPlayerPropsFielderOnly():
     # start with current currency from file
     current5 = readCurrency()
     starting5 = current5
-    betAmountFielder = int(input("How much currency would you like to bet? "))
+    betAmountFielder = int(input("How much currency would you like to bet?\n"))
     if betAmountFielder > current5:
         print("You do not have enough currency to make that bet. Please try again.")
         time.sleep(2)
@@ -330,7 +330,7 @@ def betPlayerPropsFielderOnly():
         time.sleep(1)
     RandomPlayer = random.choice(Players)
     print("Your randomly selected fielder/DH to bet on today is: " + RandomPlayer + "\n")
-    HomeRun = input(f"Do you bet on {RandomPlayer} to hit a home run?\nType 'Yes' to bet on a home run and 'No' to not bet on a home run. ")
+    HomeRun = input(f"Do you bet on {RandomPlayer} to hit a home run?\nType 'Yes' to bet on a home run and 'No' to not bet on a home run.\n")
     if HomeRun == "Yes" or HomeRun == "yes":
         multiplier5 = 3
     elif HomeRun == "No" or HomeRun == "no":
@@ -340,7 +340,7 @@ def betPlayerPropsFielderOnly():
         print("Invalid input. Please try again.")
         time.sleep(2)
         bet()
-    overHitsTotal = input(f"What is the over for hits for {RandomPlayer}? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop. ")
+    overHitsTotal = input(f"What is the over for hits for {RandomPlayer}? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop.\n")
     if overHitsTotal.endswith('.5'):
         multiplier5 = 1.9
     elif overHitsTotal == "No Bet" or overHitsTotal == "no bet":
@@ -350,7 +350,7 @@ def betPlayerPropsFielderOnly():
         print("Invalid total format. Please try again.")
         time.sleep(2)
         bet()
-    underHitsTotal = input(f"What is the under for hits for {RandomPlayer}? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop. ")
+    underHitsTotal = input(f"What is the under for hits for {RandomPlayer}? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop.\n")
     if underHitsTotal.endswith('.5'):
         multiplier5 = 1.9
     elif underHitsTotal == "No Bet" or underHitsTotal == "no bet":
@@ -360,7 +360,7 @@ def betPlayerPropsFielderOnly():
         print("Invalid total format. Please try again.")
         time.sleep(2)
         bet()
-    pick4 = input("Do you pick the over or under for hits?\nType 'Over' to pick the over and 'Under' to pick the under.\nType 'No Bet' to not bet on this prop. ")
+    pick4 = input("Do you pick the over or under for hits?\nType 'Over' to pick the over and 'Under' to pick the under.\nType 'No Bet' to not bet on this prop.\n")
     if pick4 == "Over" or pick4 == "over":
         multiplier5 = multiplier5
     elif pick4 == "Under" or pick4 == "under":
@@ -373,7 +373,7 @@ def betPlayerPropsFielderOnly():
     menu()
 
 def betPlayerPropsFielder():
-    global betAmountFielder2, multiplier6, current6, starting6
+    global betAmountFielder2, multiplier6, current6, starting6, HomeRun, overHitsTotal, underHitsTotal
     # start with current currency from file
     current6 = readCurrency()
     starting6 = current6
@@ -491,6 +491,97 @@ def checkBetRunTotals():
         print("Invalid input. Please try again.")
         time.sleep(2)
         menu()
+    menu()
+
+def checkBetPlayerPropsPitcherOnly():
+    global betAmountPitcher, multiplier3, current3, starting3, strikeouts, StrikeoutsOverTotal, StrikeoutsUnderTotal
+    strikeouts = int(input("How many strikeouts did your pitcher have? Type a number. "))
+    if (multiplier3 > 0 and strikeouts > int(StrikeoutsOverTotal)) or (multiplier3 < 0 and strikeouts < int(StrikeoutsUnderTotal)):
+        winnings = int(betAmountPitcher * multiplier3)
+        current3 += winnings
+        writeCurrency(current3)
+        print(f"You won {winnings} currency from your bet!\n")
+    else:
+        print(f"You lost {betAmountPitcher} currency from your bet.\n")
+    global betAmountFielder, multiplier5, current5, starting5, HomeRun, overHitsTotal, underHitsTotal
+    homeRunInput = input("Did your randomly selected fielder/DH hit a home run?\nType 'Yes' for yes and 'No' for no. ")
+    if (HomeRun == "Yes" or HomeRun == "yes") and homeRunInput == "Yes":
+        winnings = int(betAmountFielder * multiplier5)
+        current5 += winnings
+        writeCurrency(current5)
+        print(f"You won {winnings} currency from your home run prop bet!\n")
+    elif (HomeRun == "Yes" or HomeRun == "yes") and homeRunInput == "No":
+        print(f"You lost {betAmountFielder} currency from your home run prop bet.\n")
+    elif (HomeRun == "No" or HomeRun == "no") and homeRunInput == "No":
+        winnings = int(betAmountFielder * multiplier5)
+        current5 += winnings
+        writeCurrency(current5)
+        print(f"You won {winnings} currency from your home run prop bet!\n")
+    elif (HomeRun == "No" or HomeRun == "no") and homeRunInput == "Yes":
+        print(f"You lost {betAmountFielder} currency from your home run prop bet.\n")
+    else:
+        print("Invalid input. Please try again.")
+        time.sleep(2)
+        menu()
+    hitsInput = float(input("How many hits did your randomly selected fielder/DH have? Type a number. "))
+    if (overHitsTotal != "No Bet" and hitsInput > float(overHitsTotal)) or (underHitsTotal != "No Bet" and hitsInput < float(underHitsTotal)):
+        winnings = int(betAmountFielder * multiplier5)
+        current5 += winnings
+        writeCurrency(current5)
+        print(f"You won {winnings} currency from your hits prop bet!\n")
+    else:
+        print(f"You lost {betAmountFielder} currency from your hits prop bet.\n")
+    menu()
+
+def checkBetPlayerPropsBoth():
+    global betAmountPitcher, multiplier7, current7, starting7, strikeouts, StrikeoutsOverTotal, StrikeoutsUnderTotal
+    strikeouts = int(input("How many strikeouts did your pitcher have? Type a number. "))
+    if (multiplier7 > 0 and strikeouts > int(StrikeoutsOverTotal)) or (multiplier7 < 0 and strikeouts < int(StrikeoutsUnderTotal)):
+        winnings = int(betAmountPitcher * multiplier7)
+        current7 += winnings
+        writeCurrency(current7)
+        print(f"You won {winnings} currency from your bet!\n")
+    else:
+        print(f"You lost {betAmountPitcher} currency from your bet.\n")
+
+    global betAmountFielder, multiplier5, current5, starting5, HomeRun, overHitsTotal, underHitsTotal
+    homeRunInput = input("Did your randomly selected fielder/DH hit a home run?\nType 'Yes' for yes and 'No' for no. ")
+    if (HomeRun == "Yes" or HomeRun == "yes") and homeRunInput == "Yes":
+        winnings = int(betAmountFielder * multiplier5)
+        current5 += winnings
+        writeCurrency(current5)
+        print(f"You won {winnings} currency from your home run prop bet!\n")
+    elif (HomeRun == "Yes" or HomeRun == "yes") and homeRunInput == "No":
+        print(f"You lost {betAmountFielder} currency from your home run prop bet.\n")
+    elif (HomeRun == "No" or HomeRun == "no") and homeRunInput == "No":
+        winnings = int(betAmountFielder * multiplier5)
+        current5 += winnings
+        writeCurrency(current5)
+        print(f"You won {winnings} currency from your home run prop bet!\n")
+    elif (HomeRun == "No" or HomeRun == "no") and homeRunInput == "Yes":
+        print(f"You lost {betAmountFielder} currency from your home run prop bet.\n")
+    else:
+        print("Invalid input. Please try again.")
+        time.sleep(2)
+        menu()
+    hitsInput = float(input("How many hits did your randomly selected fielder/DH have? Type a number. "))
+    if (overHitsTotal != "No Bet" and hitsInput > float(overHitsTotal)) or (underHitsTotal != "No Bet" and hitsInput < float(underHitsTotal)):
+        winnings = int(betAmountFielder * multiplier5)
+        current5 += winnings
+        writeCurrency(current5)
+        print(f"You won {winnings} currency from your hits prop bet!\n")
+    else:
+        print(f"You lost {betAmountFielder} currency from your hits prop bet.\n")
+    strikeouts = int(input("How many strikeouts did your pitcher have? Type a number. "))
+    if (multiplier3 > 0 and strikeouts > int(StrikeoutsOverTotal)) or (multiplier3 < 0 and strikeouts < int(StrikeoutsUnderTotal)):
+        winnings = int(betAmountPitcher * multiplier3)
+        current3 += winnings
+        writeCurrency(current3)
+        print(f"You won {winnings} currency from your bet!\n")
+    else:
+        print(f"You lost {betAmountPitcher} currency from your bet.\n")
+    print("Going back to the main menu...\n")
+    time.sleep(2)
     menu()
 #Points Menu
 def points():
@@ -637,7 +728,7 @@ def checkDailyInputBetCheckOutcome():
         return True
 
 def checkDailyInputBetRunTotals():
-    trackingFile = "last_run_bet_run_totals.txt"
+    trackingFile = "last_run_check_bet_runs.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     if os.path.exists(trackingFile):
         with open(trackingFile, 'r') as file:
@@ -705,13 +796,13 @@ def recordRunDatePoints():
         file.write(today_str)
 
 def recordRunDateBetCheckOutcome():
-    trackingFile = "last_run_bet_check_outcome.txt"
+    trackingFile = "last_run_bet_check_bet_outcome.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     with open(trackingFile, 'w') as file:
         file.write(today_str)
 
 def recordRunDateBetRunTotals():
-    trackingFile = "last_run_bet_run_totals.txt"
+    trackingFile = "last_run_check_bet_runs.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     with open(trackingFile, 'w') as file:
         file.write(today_str)
