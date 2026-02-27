@@ -74,7 +74,7 @@ def readCurrency():
 
 #Bet Home Menus
 def bet():
-    betInput = input("What would you like to bet on?\nType 'Outcome' to bet on the outcome of the game.\nType 'Runs' to bet on the total runs scored in the game.\nType 'Back' to go back to the main menu.")
+    betInput = input("What would you like to bet on?\nType 'Outcome' to bet on the outcome of the game.\nType 'Runs' to bet on the total runs scored in the game.\nType 'Props' to bet on player props.\nType 'Back' to go back to the main menu.")
     if betInput == "Outcome" or betInput == "outcome":
         checkDailyInputBetCheckOutcome()
         if checkDailyInputBetCheckOutcome() == True:
@@ -93,6 +93,8 @@ def bet():
         elif checkDailyInputBetRunTotals() == False:
             print("\nYou have already made a bet on the total runs scored in the game for the day! Please come back tomorrow to make a new bet.\n")
         time.sleep(2)
+    elif betInput == "Props" or betInput == "props":
+        betPlayerPropsHomeMenu()
     elif betInput == "Back" or betInput == "back":
         print("Going back to the main menu...\n")
         time.sleep(2)
@@ -116,7 +118,6 @@ def betPlayerPropsHomeMenu():
             time.sleep(2)
             menu()
         time.sleep(2)
-        #add code for betting on pitcher's performance here
     elif input2 == "Fielder" or input2 == "fielder":
         checkDailyInputBetPlayerPropsFielder()
         if checkDailyInputBetPlayerPropsFielder() == True:
@@ -181,7 +182,7 @@ def betRunTotals():
     if betAmountRuns > current2:
         print("You do not have enough currency to make that bet. Please try again.")
         time.sleep(2)
-        menu()
+        bet()
     else:
         current2 -= betAmountRuns
         writeCurrency(current2)
@@ -193,19 +194,57 @@ def betRunTotals():
     else:
         print("Invalid total format. Please try again.")
         time.sleep(2)
-        menu()
+        bet()
     underTotal = input("What is the under run total? (e.g. 8.5, 5.5) ")
     if underTotal.endswith('.5'):
         multiplier2 = 1.9
     else:
         print("Invalid total format. Please try again.")
         time.sleep(2)
-        menu()
+        bet()
     time.sleep(2)
     print("Going back to the main menu...\n")
     time.sleep(2)
     menu()
 
+def betPlayerPropsPitcher():
+    
+    global betAmountPitcher, multiplier3, current3, starting3
+    # start with current currency from file
+    current3 = readCurrency()
+    starting3 = current3
+
+    betAmountPitcher = int(input("How much currency would you like to bet? "))
+    if betAmountPitcher > current3:
+        print("You do not have enough currency to make that bet. Please try again.")
+        time.sleep(2)
+        bet()
+    else:
+        current3 -= betAmountPitcher
+        writeCurrency(current3)
+        time.sleep(1)
+    dailyPitcher = Pitcher[0]
+    print(f"Your pitcher to bet on today is: {dailyPitcher}\n")
+    time.sleep(2)
+
+    StrikeoutsOverTotal = input("What is the over for strikeouts for your pitcher? (e.g. 8.5, 5.5) ")
+    if StrikeoutsOverTotal.endswith('.5'):
+        multiplier3 = 1.9
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    StrikeoutsUnderTotal = input("What is the under for strikeouts for your pitcher? (e.g. 8.5, 5.5) ")
+    if StrikeoutsUnderTotal.endswith('.5'):
+        multiplier3 = 1.9
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    time.sleep(2)
+    print("Going back to the main menu...\n")
+    time.sleep(2)
+    menu()
 #Check Bet Home Menu
 def checkBet():
     checkInput = input("What bet would you like to check on?\nType 'Outcome' to check on the outcome of the game.\nType 'Runs' to check on the total runs scored in the game.\nType 'Back' to go back to the main menu.")
@@ -229,6 +268,7 @@ def checkBet():
         elif checkDailyInputBetRunTotals() == False:
             print("\nYou have already checked your bet on the total runs scored in the game for the day! Please come back tomorrow to check new bets.\n")
         time.sleep(2)
+    #elif checkInput == "Props" or checkInput == "props":
     elif checkInput == "Back" or checkInput == "back":
         print("Going back to the main menu...\n")
         time.sleep(2)
