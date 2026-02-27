@@ -35,6 +35,9 @@ Teams = [
 ]
 #Array of used teams
 Players = []
+CombinedPitchersAndFielders = []
+Pitcher = []
+
 #Write Score to file
 def writeScore(score):
     # score should be an integer
@@ -69,7 +72,7 @@ def readCurrency():
         except ValueError:
             return 0
 
-#Bet Home Menu
+#Bet Home Menus
 def bet():
     betInput = input("What would you like to bet on?\nType 'Outcome' to bet on the outcome of the game.\nType 'Runs' to bet on the total runs scored in the game.\nType 'Back' to go back to the main menu.")
     if betInput == "Outcome" or betInput == "outcome":
@@ -98,6 +101,44 @@ def bet():
         print("Invalid input, please try again.")
         time.sleep(2)
         bet()
+
+def betPlayerPropsHomeMenu():
+    input2 = input("Would you like to bet on pitcher's performance or fielder's performance, or both?")
+    if input2 == "Pitcher" or input2 == "pitcher":
+        checkDailyInputBetPlayerPropsPitcher()
+        if checkDailyInputBetPlayerPropsPitcher() == True:
+            print("You have chosen to bet on the pitcher's performance!\n")
+            recordRunDateBetPlayerPropsPitcher()
+            time.sleep(2)
+            #add code for betting on pitcher's performance here
+        elif checkDailyInputBetPlayerPropsPitcher() == False:
+            print("You have already made a bet on the pitcher's performance for the day! Please come back tomorrow to make a new bet.\n")
+            time.sleep(2)
+            menu()
+        time.sleep(2)
+        #add code for betting on pitcher's performance here
+    elif input2 == "Fielder" or input2 == "fielder":
+        checkDailyInputBetPlayerPropsFielder()
+        if checkDailyInputBetPlayerPropsFielder() == True:
+            print("You have chosen to bet on the fielder's performance!\n")
+            recordRunDateBetPlayerPropsFielder()
+            time.sleep(2)
+        elif checkDailyInputBetPlayerPropsFielder() == False:
+            print("You have already made a bet on the fielder's performance for the day! Please come back tomorrow to make a new bet.\n")
+            time.sleep(2)
+            menu()
+        #add code for betting on fielder's performance here
+    elif input2 == "Both" or input2 == "both":
+        checkDailyInputBetPlayerPropsBoth()
+        if checkDailyInputBetPlayerPropsBoth() == True:
+            print("You have chosen to bet on both the pitcher's and fielder's performance!\n")
+            recordRunDateBetPlayerPropsBoth()
+            time.sleep(2)
+        elif checkDailyInputBetPlayerPropsBoth() == False:
+            print("You have already made a bet on both the pitcher's and fielder's performance for the day! Please come back tomorrow to make a new bet.\n")
+            time.sleep(2)
+            menu()
+
 #Bet Menus
 def betGameOutcome():
     global betAmountOutcome, multiplier1, current1, starting1
@@ -196,6 +237,7 @@ def checkBet():
         print("Invalid input, please try again.\n")
         time.sleep(2)
         checkBet()
+
 #Check Bet Menus
 def checkBetGameOutcome():
     global betAmountOutcome, multiplier1, current1, starting1
@@ -276,41 +318,51 @@ def playerInput():
     time.sleep(2)
     catcher = input("Enter your starting Catcher: ")
     Players.append(catcher)
+    CombinedPitchersAndFielders.append(catcher)
     time.sleep(1)
     firstBase = input("Enter your starting First Baseman: ")
     Players.append(firstBase)
+    CombinedPitchersAndFielders.append(firstBase)
     time.sleep(1)
     secondBase = input("Enter your starting Second Baseman: ")
     Players.append(secondBase)
+    CombinedPitchersAndFielders.append(secondBase)
     time.sleep(1)
     thirdBase = input("Enter your starting Third Baseman: ")
     Players.append(thirdBase)
+    CombinedPitchersAndFielders.append(thirdBase)
     time.sleep(1)
     shortStop = input("Enter your starting Short Stop: ")
     Players.append(shortStop)
+    CombinedPitchersAndFielders.append(shortStop)
     time.sleep(1)
     leftField = input("Enter your starting Left Fielder: ")
     Players.append(leftField)
+    CombinedPitchersAndFielders.append(leftField)
     time.sleep(1)
     centerField = input("Enter your starting Center Fielder: ")
     Players.append(centerField)
+    CombinedPitchersAndFielders.append(centerField)
     time.sleep(1)
     rightField = input("Enter your starting Right Fielder: ")
     Players.append(rightField)
+    CombinedPitchersAndFielders.append(rightField)
     time.sleep(1)
     startingPitcher = input("Enter your starting Pitcher: ")
-    Players.append(startingPitcher)
+    Pitcher.append(startingPitcher)
+    CombinedPitchersAndFielders.append(startingPitcher)
     time.sleep(1)
     DesignatedHitter = input("Enter your starting Designated Hitter: ")
     Players.append(DesignatedHitter)
+    CombinedPitchersAndFielders.append(DesignatedHitter)
     time.sleep(1)
-    while "N" in Players:
-        Players.remove("N")
-    while "n" in Players:
-        Players.remove("n")
+    while "N" in CombinedPitchersAndFielders:
+        CombinedPitchersAndFielders.remove("N")
+    while "n" in CombinedPitchersAndFielders:
+        CombinedPitchersAndFielders.remove("n")
     time.sleep(3)
-    writeScore(str(len(Players)))
-    if len(Players) == 10:
+    writeScore(str(len(CombinedPitchersAndFielders)))
+    if len(CombinedPitchersAndFielders) == 10:
         print("You have entered a full starting lineup! You have earned 500 currency points!\n")
         current = readCurrency()
         current += 500
@@ -322,19 +374,6 @@ def playerInput():
 #Checking and Recording Dates for daily input functions to prevent multiple entries in one day
 def checkDailyInputPlayers():
     trackingFile = "last_run_players.txt"
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    if os.path.exists(trackingFile):
-        with open(trackingFile, 'r') as file:
-            last_run = file.read().strip()
-        if last_run == today_str:
-            print("You already used this function today. Please come back tomorrow!")
-            return False
-        else:
-            return True
-    else:
-        return True
-    
-    trackingFile = "last_run_bet.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     if os.path.exists(trackingFile):
         with open(trackingFile, 'r') as file:
@@ -389,6 +428,48 @@ def checkDailyInputBetRunTotals():
     else:
         return True
 
+def checkDailyInputBetPlayerPropsPitcher():
+    trackingFile = "last_run_bet_props_pitcher.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    if os.path.exists(trackingFile):
+        with open(trackingFile, 'r') as file:
+            last_run = file.read().strip()
+        if last_run == today_str:
+            print("You already used this function today. Please come back tomorrow!")
+            return False
+        else:
+            return True
+    else:
+        return True
+
+def checkDailyInputBetPlayerPropsFielder():
+    trackingFile = "last_run_bet_props_fielder.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    if os.path.exists(trackingFile):
+        with open(trackingFile, 'r') as file:
+            last_run = file.read().strip()
+        if last_run == today_str:
+            print("You already used this function today. Please come back tomorrow!")
+            return False
+        else:
+            return True
+    else:
+        return True
+    
+def checkDailyInputBetPlayerPropsBoth():
+    trackingFile = "last_run_bet_props_both.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    if os.path.exists(trackingFile):
+        with open(trackingFile, 'r') as file:
+            last_run = file.read().strip()
+        if last_run == today_str:
+            print("You already used this function today. Please come back tomorrow!")
+            return False
+        else:
+            return True
+    else:
+        return True
+
 def recordRunDatePlayers():
     trackingFile = "last_run_players.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
@@ -413,6 +494,23 @@ def recordRunDateBetRunTotals():
     with open(trackingFile, 'w') as file:
         file.write(today_str)
 
+def recordRunDateBetPlayerPropsPitcher():
+    trackingFile = "last_run_bet_props_pitcher.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    with open(trackingFile, 'w') as file:
+        file.write(today_str)
+
+def recordRunDateBetPlayerPropsFielder():
+    trackingFile = "last_run_bet_props_fielder.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    with open(trackingFile, 'w') as file:
+        file.write(today_str)
+
+def recordRunDateBetPlayerPropsBoth():
+    trackingFile = "last_run_bet_props_both.txt"
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    with open(trackingFile, 'w') as file:
+        file.write(today_str)
 #Daily Team Menu
 def daily_team(items_array):
     today = datetime.now().date()
