@@ -714,7 +714,7 @@ def checkDailyInputPoints():
         return True
 
 def checkDailyInputBetCheckOutcome():
-    trackingFile = "last_run_bet_check_outcome.txt"
+    trackingFile = "last_run_check_bet_outcome.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     if os.path.exists(trackingFile):
         with open(trackingFile, 'r') as file:
@@ -796,7 +796,7 @@ def recordRunDatePoints():
         file.write(today_str)
 
 def recordRunDateBetCheckOutcome():
-    trackingFile = "last_run_bet_check_bet_outcome.txt"
+    trackingFile = "last_run_check_bet_outcome.txt"
     today_str = datetime.now().strftime("%Y-%m-%d")
     with open(trackingFile, 'w') as file:
         file.write(today_str)
