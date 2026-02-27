@@ -111,6 +111,7 @@ def betPlayerPropsHomeMenu():
         if checkDailyInputBetPlayerPropsPitcher() == True:
             print("You have chosen to bet on the pitcher's performance!\n")
             recordRunDateBetPlayerPropsPitcher()
+            betPlayerPropsPitcherOnly()
             time.sleep(2)
             #add code for betting on pitcher's performance here
         elif checkDailyInputBetPlayerPropsPitcher() == False:
@@ -134,6 +135,7 @@ def betPlayerPropsHomeMenu():
         if checkDailyInputBetPlayerPropsBoth() == True:
             print("You have chosen to bet on both the pitcher's and fielder's performance!\n")
             recordRunDateBetPlayerPropsBoth()
+            betPlayerPropsPitcher()
             time.sleep(2)
         elif checkDailyInputBetPlayerPropsBoth() == False:
             print("You have already made a bet on both the pitcher's and fielder's performance for the day! Please come back tomorrow to make a new bet.\n")
@@ -166,7 +168,11 @@ def betGameOutcome():
         print("Invalid odds format. Please try again.")
         time.sleep(2)
         menu()
-
+    pick = input("Do you pick your team to win or lose?\nType 'Win' to pick your team to win and 'Lose' to pick your team to lose. ")
+    if pick == "Win" or pick == "win":
+        multiplier1 = multiplier1  
+    elif pick == "Lose" or pick == "lose":
+        multiplier1 = -multiplier1
     time.sleep(2)
     print("Going back to the main menu...\n")
     time.sleep(2)
@@ -202,12 +208,17 @@ def betRunTotals():
         print("Invalid total format. Please try again.")
         time.sleep(2)
         bet()
+    pick2 = input("Do you pick the over or under?\nType 'Over' to pick the over and 'Under' to pick the under. ")
+    if pick2 == "Over" or pick2 == "over":
+        multiplier2 = multiplier2
+    elif pick2 == "Under" or pick2 == "under":
+        multiplier2 = -multiplier2
     time.sleep(2)
     print("Going back to the main menu...\n")
     time.sleep(2)
     menu()
 
-def betPlayerPropsPitcher():
+def betPlayerPropsPitcherOnly():
     
     global betAmountPitcher, multiplier3, current3, starting3
     # start with current currency from file
@@ -241,7 +252,178 @@ def betPlayerPropsPitcher():
         print("Invalid total format. Please try again.")
         time.sleep(2)
         bet()
+    pick3 = input("Do you pick the over or under for strikeouts?\nType 'Over' to pick the over and 'Under' to pick the under. ")
+    if pick3 == "Over" or pick3 == "over":
+        multiplier3 = multiplier3
+    elif pick3 == "Under" or pick3 == "under":
+        multiplier3 = -multiplier3
     time.sleep(2)
+    print("Going back to the main menu...\n")
+    time.sleep(2)
+    menu()
+
+def betPlayerPropsPitcher():
+    global betAmountPitcher2, multiplier4, current4, starting4
+    # start with current currency from file
+    current4 = readCurrency()
+    starting4 = current4
+
+    betAmountPitcher2 = int(input("How much currency would you like to bet? "))
+    if betAmountPitcher2 > current4:
+        print("You do not have enough currency to make that bet. Please try again.")
+        time.sleep(2)
+        bet()
+    else:
+        current4 -= betAmountPitcher2
+        writeCurrency(current4)
+        time.sleep(1)
+    dailyPitcher = Pitcher[0]
+    print(f"Your pitcher to bet on today is: {dailyPitcher}\n")
+    time.sleep(2)
+
+    StrikeoutsOverTotal = input("What is the over for strikeouts for your pitcher? (e.g. 8.5, 5.5)\n Type 'No Bet' to not bet on this prop. ")
+    if StrikeoutsOverTotal.endswith('.5'):
+        multiplier4 = 1.9
+    elif StrikeoutsOverTotal == "No Bet" or StrikeoutsOverTotal == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    StrikeoutsUnderTotal = input("What is the under for strikeouts for your pitcher? (e.g. 8.5, 5.5)\nType 'No Bet' to not bet on this prop. ")
+    if StrikeoutsUnderTotal.endswith('.5'):
+        multiplier4 = 1.9
+    elif StrikeoutsUnderTotal == "No Bet" or StrikeoutsUnderTotal == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    pick3 = input("Do you pick the over or under for strikeouts?\nType 'Over' to pick the over and 'Under' to pick the under.\n Tpye 'No Bet' to not bet on this prop. ")
+    if pick3 == "Over" or pick3 == "over":
+        multiplier4 = multiplier4
+    elif pick3 == "Under" or pick3 == "under":
+        multiplier4 = -multiplier4
+    elif pick3 == "No Bet" or pick3 == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    time.sleep(2)
+    print("Going to the fielder props menu...\n")
+    time.sleep(2)
+    betPlayerPropsFielder()
+
+def betPlayerPropsFielderOnly():
+    global betAmountFielder, multiplier5, current5, starting5
+    # start with current currency from file
+    current5 = readCurrency()
+    starting5 = current5
+    betAmountFielder = int(input("How much currency would you like to bet? "))
+    if betAmountFielder > current5:
+        print("You do not have enough currency to make that bet. Please try again.")
+        time.sleep(2)
+        bet()
+    else:
+        current5 -= betAmountFielder
+        writeCurrency(current5)
+        time.sleep(1)
+    RandomPlayer = random.choice(Players)
+    print("Your randomly selected fielder/DH to bet on today is: " + RandomPlayer + "\n")
+    HomeRun = input(f"Do you bet on {RandomPlayer} to hit a home run?\nType 'Yes' to bet on a home run and 'No' to not bet on a home run. ")
+    if HomeRun == "Yes" or HomeRun == "yes":
+        multiplier5 = 3
+    elif HomeRun == "No" or HomeRun == "no":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid input. Please try again.")
+        time.sleep(2)
+        bet()
+    overHitsTotal = input(f"What is the over for hits for {RandomPlayer}? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop. ")
+    if overHitsTotal.endswith('.5'):
+        multiplier5 = 1.9
+    elif overHitsTotal == "No Bet" or overHitsTotal == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    underHitsTotal = input(f"What is the under for hits for {RandomPlayer}? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop. ")
+    if underHitsTotal.endswith('.5'):
+        multiplier5 = 1.9
+    elif underHitsTotal == "No Bet" or underHitsTotal == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    pick4 = input("Do you pick the over or under for hits?\nType 'Over' to pick the over and 'Under' to pick the under.\nType 'No Bet' to not bet on this prop. ")
+    if pick4 == "Over" or pick4 == "over":
+        multiplier5 = multiplier5
+    elif pick4 == "Under" or pick4 == "under":
+        multiplier5 = -multiplier5
+    elif pick4 == "No Bet" or pick4 == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    print("Going back to the main menu...\n")
+    time.sleep(2)
+    menu()
+
+def betPlayerPropsFielder():
+    global betAmountFielder2, multiplier6, current6, starting6
+    # start with current currency from file
+    current6 = readCurrency()
+    starting6 = current6
+    betAmountFielder2 = int(input("How much currency would you like to bet? "))
+    if betAmountFielder2 > current6:
+        print("You do not have enough currency to make that bet. Please try again.")
+        time.sleep(2)
+        bet()
+    else:
+        current6 -= betAmountFielder2
+        writeCurrency(current6)
+        time.sleep(1)
+    HomeRun = input("Do you bet on a randomly selected fielder/DH to hit a home run?\nType 'Yes' to bet on a home run and 'No' to not bet on a home run. ")
+    if HomeRun == "Yes" or HomeRun == "yes":
+        multiplier6 = 3
+    elif HomeRun == "No" or HomeRun == "no":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid input. Please try again.")
+        time.sleep(2)
+        bet()
+    overHitsTotal = input("What is the over for hits for your randomly selected fielder/DH? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop. ")
+    if overHitsTotal.endswith('.5'):
+        multiplier6 = 1.9
+    elif overHitsTotal == "No Bet" or overHitsTotal == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    underHitsTotal = input("What is the under for hits for your randomly selected fielder/DH? (e.g. 1.5, 2.5)\nType 'No Bet' to not bet on this prop. ")
+    if underHitsTotal.endswith('.5'):
+        multiplier6 = 1.9
+    elif underHitsTotal == "No Bet" or underHitsTotal == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
+    else:
+        print("Invalid total format. Please try again.")
+        time.sleep(2)
+        bet()
+    pick4 = input("Do you pick the over or under for hits?\nType 'Over' to pick the over and 'Under' to pick the under.\nType 'No Bet' to not bet on this prop. ")
+    if pick4 == "Over" or pick4 == "over":
+        multiplier6 = multiplier6
+    elif pick4 == "Under" or pick4 == "under":
+        multiplier6 = -multiplier6
+    elif pick4 == "No Bet" or pick4 == "no bet":
+        print("You have chosen not to bet on this prop.")
+        time.sleep(2)
     print("Going back to the main menu...\n")
     time.sleep(2)
     menu()
